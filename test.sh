@@ -5,6 +5,10 @@ vpc_cidr="10.0.0.0/16"
 subnet1_id="10.0.1.0/24"
 ami_id="ami-033fabdd332044f06" #->Amazon Linux 2023 AMI
 instance_type="t2.micro"
+bucket1_name="kai-zen-88"
+bucket2_name="kai-zen-99"
+my_file="test55.txt"
+
 
 vpc_id=$(aws ec2 create-vpc --cidr-block $vpc_cidr --region $region --query Vpc.VpcId --output text)
 
@@ -25,3 +29,8 @@ sg_id=$(aws ec2 create-security-group --group-name EC2SecurityGroup --descriptio
 aws ec2 authorize-security-group-ingress --group-id $sg_id --protocol tcp --port 22 --cidr 0.0.0.0/0 --region $region
 
 INSTANCE_ID=$(aws ec2 run-instances --image-id $ami_id --count 1 --instance-type $instance_type --key-name key2 --associate-public-ip-address --security-group-ids $sg_id --subnet-id $subnet_id --query 'Instances[0].InstanceId' --output text)
+
+aws s3api create-bucket --bucket $bucket1_name --region $region --create-bucket-configuration LocationConstraint=$region
+aws s3api create-bucket --bucket $bucket2_name --region $region --create-bucket-configuration LocationConstraint=$region
+aws s3 cp $my_file s3://$bucket1_name
+aws s3 cp s3://$bucket1_name/$my_file s3://$bucket2_name
