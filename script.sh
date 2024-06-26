@@ -31,12 +31,8 @@ aws ec2 authorize-security-group-ingress --group-id $sg_id --protocol tcp --port
 INSTANCE_ID=$(aws ec2 run-instances --image-id $ami_id --count 1 --instance-type $instance_type --key-name key2 --associate-public-ip-address --security-group-ids $sg_id --subnet-id $subnet_id --query 'Instances[0].InstanceId' --output text)
 echo "Instance id -> "$INSTANCE_ID
 
-
-# Wait until the instance is in the running state
 aws ec2 wait instance-running --instance-ids $INSTANCE_ID
 
-
-# Get the public IP address
 PUBLIC_IP=$(aws ec2 describe-instances \
     --instance-ids $INSTANCE_ID \
     --query 'Reservations[0].Instances[0].PublicIpAddress' \
