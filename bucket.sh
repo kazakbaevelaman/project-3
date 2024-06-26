@@ -1,7 +1,7 @@
 #!/bin/bash
 region="us-east-2"
-bucket1_name="kai-zen-55"
-bucket2_name="kai-zen-56"
+bucket1_name="kai-zen-{{timestamp}}"
+bucket2_name="kai-zen-{{timestamp}}"
 my_file="test55.txt"
 
 aws s3api create-bucket --bucket $bucket1_name --region $region --create-bucket-configuration LocationConstraint=$region
