@@ -8,7 +8,8 @@ instance_type="t2.micro"
 bucket1_name="kai-zen-{{timestamp}}"
 bucket2_name="kai-zen-{{timestamp}}"
 my_file="test55.txt"
-
+current_public_key=$(cat ~/.ssh/id_rsa.pub)
+my_key="my_key"
 
 vpc_id=$(aws ec2 create-vpc --cidr-block $vpc_cidr --region $region --query Vpc.VpcId --output text)
 
@@ -28,20 +29,21 @@ sg_id=$(aws ec2 create-security-group --group-name EC2SecurityGroup --descriptio
 
 aws ec2 authorize-security-group-ingress --group-id $sg_id --protocol tcp --port 22 --cidr 0.0.0.0/0 --region $region
 
-INSTANCE_ID=$(aws ec2 run-instances --image-id $ami_id --count 1 --instance-type $instance_type --key-name key2 --associate-public-ip-address --security-group-ids $sg_id --subnet-id $subnet_id --query 'Instances[0].InstanceId' --output text)
-echo "Instance id -> "$INSTANCE_ID
+aws ec2 import-key-pair --key-name $my_key --public-key-material $current_public_key
 
-aws ec2 wait instance-running --instance-ids $INSTANCE_ID
+instance_id=$(aws ec2 run-instances --image-id $ami_id --count 1 --instance-type $instance_type --key-name $my_key --associate-public-ip-address --security-group-ids $sg_id --subnet-id $subnet_id --query 'Instances[0].InstanceId' --output text)
 
-PUBLIC_IP=$(aws ec2 describe-instances \
-    --instance-ids $INSTANCE_ID \
+aws ec2 wait instance-running --instance-ids $instance_id
+
+public_ip=$(aws ec2 describe-instances \
+    --instance-ids $instance_id \
     --query 'Reservations[0].Instances[0].PublicIpAddress' \
     --output text)
 
-echo "Public IP address: $PUBLIC_IP"
+echo "Public IP address: $public_ip"
 
 
-ssh -i "~/.ssh/id_rsa" ec2-user@$PUBLIC_IP -y
+ssh -i "~/.ssh/id_rsa" ec2-user@$public_ip -y 
 
 
 #aws s3api create-bucket --bucket $bucket1_name --region $region --create-bucket-configuration LocationConstraint=$region
