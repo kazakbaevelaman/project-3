@@ -1,12 +1,23 @@
 #!/bin/bash
-region="us-east-2"
-bucket1_name="kai-zen-{{timestamp}}"
-bucket2_name="kai-zen-{{timestamp}}"
-my_file="test55.txt"
 
-aws s3api create-bucket --bucket $bucket1_name --region $region --create-bucket-configuration LocationConstraint=$region
-aws s3api create-bucket --bucket $bucket2_name --region $region --create-bucket-configuration LocationConstraint=$region
+source config.sh
 
+# Create the AWS configuration directory if it doesn't exist
+mkdir -p ~/.aws
 
-aws s3 cp $my_file s3://$bucket1_name
+# Write to the AWS credentials file
+cat <<EOL > ~/.aws/credentials
+[default]
+aws_access_key_id = $AWS_ACCESS_KEY_ID
+aws_secret_access_key = $AWS_SECRET_ACCESS_KEY
+EOL
+
+# Write to the AWS config file
+cat <<EOL > ~/.aws/config
+[default]
+region = $region
+output = json
+EOL
+
+#Copy logic 
 aws s3 cp s3://$bucket1_name/$my_file s3://$bucket2_name
