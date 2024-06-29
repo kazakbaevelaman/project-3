@@ -14,7 +14,5 @@ bucket2_name="kai-zen022"
 
 # Create and import aws keys 
 #AWS_ACCESS_KEY_ID="<your-access-key>"
-#AWS_SECRET_ACCESS_KEY="<your-secret-key>"
+#AWS_SECRET_ACCESS_KEY="<your-s-key>"
 
-AWS_ACCESS_KEY_ID="AKIA2UC3CGAWZIW3RVOE"
-AWS_SECRET_ACCESS_KEY="4UbhoWUM2stYrJUWoOn1mOvWxSsI/xA+79xNFeTR"
