@@ -7,9 +7,14 @@ timestamp=$(date +%s)
 my_file="test55.txt"
 current_public_key=$(cat ~/.ssh/id_rsa.pub | base64)
 my_key="my_key-${timestamp}"
+# Bucket names needs to be updated for every run
+bucket1_name="kai-zen011"
+bucket2_name="kai-zen022"
 
-bucket1_name="kai-zen-myb8"
-bucket2_name="kai-zen-myb9"
 
+# Create and import aws keys 
+#AWS_ACCESS_KEY_ID="<your-access-key>"
+#AWS_SECRET_ACCESS_KEY="<your-secret-key>"
 
-#Import aws keys 
+AWS_ACCESS_KEY_ID="AKIA2UC3CGAWZIW3RVOE"
+AWS_SECRET_ACCESS_KEY="4UbhoWUM2stYrJUWoOn1mOvWxSsI/xA+79xNFeTR"

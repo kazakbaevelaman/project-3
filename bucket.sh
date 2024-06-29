@@ -19,5 +19,5 @@ region = $region
 output = json
 EOL
 
-#Copy logic 
+# Copy file from bucket1 to bucket2 using AWS CLI
 aws s3 cp s3://$bucket1_name/$my_file s3://$bucket2_name
